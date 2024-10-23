@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="RemoteTargetsManager">
+    <targets>
+      <target name="root@47.116.177.122:22" type="ssh/sftp" uuid="79232b2b-003b-45f5-a8da-2b9abffdb424">
+        <config>
+          <option name="projectRootOnTarget" value="/home/dev/godo" />
+          <option name="serverName" value="root@47.116.177.122:22 password" />
+          <option name="useRsync" value="true" />
+        </config>
+        <ContributedStateBase type="GoLanguageRuntime">
+          <config>
+            <option name="goPath" value="/root/go" />
+            <option name="goRoot" value="/usr/local/go" />
+            <option name="goVersion" value="/bin/bash: /usr/bin/which: no go in (/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin): No such file or directory" />
+          </config>
+        </ContributedStateBase>
+      </target>
+    </targets>
+  </component>
+</project>
