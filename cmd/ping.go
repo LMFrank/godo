@@ -4,50 +4,39 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"net"
+	"os/exec"
 )
 
 // pingCmd represents the ping command
 var pingCmd = &cobra.Command{
-	Use:   "ping [IP]",
-	Short: "Ping an IP address",
+	Use:   "ping",
+	Short: "Ping a specified IP or multiple IPs from a YAML file.",
+	Long: `Ping a specified IP address and print the results to the console.
+For example:
+godo ping 8.8.8.8`,
+	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		ip, _ := cmd.Flags().GetString("ip")
-		configFile, _ := cmd.Flags().GetString("config")
-		if ip != "" && configFile == "" {
-			err := pingSingleIP(ip)
-			if err != nil {
-				fmt.Println(err)
-			}
-		} else if ip != "" && configFile != "" {
-			err2 := pingMultipleIPs(configFile)
-			if err2 != nil {
-				fmt.Println(err2)
-			}
-		} else {
-			fmt.Println("please provide either an IP or a config file.")
-		}
+		ip := args[0]
+		pingIP(ip)
 	},
 }
 
-func pingSingleIP(ip string) error {
-	conn, err := net.Dial("ip4:icmp", ip)
-	if err != nil {
-		fmt.Printf("Failed to ping %s: %v\n", ip, err)
+func pingIP(ip string) {
+	if net.ParseIP(ip) == nil {
+		fmt.Printf("Invalid IP address: %s\n", ip)
+		return
 	}
-	err2 := conn.Close()
-	if err2 != nil {
-		return err2
-	}
-	fmt.Printf("Ping to %s successful \n", ip)
-	return nil
-}
 
-func pingMultipleIPs(configFile string) error {
-	return nil
+	cmd := exec.Command("ping", "-c", "4", ip)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		fmt.Printf("Ping command failed with error: %s\n", err)
+		return
+	}
+
+	fmt.Printf("Ping results for %s:\n%s", ip, output)
 }
 
 func init() {
 	rootCmd.AddCommand(pingCmd)
-
-	pingCmd.Flags().StringP("ip", "p", "", "IP address to ping")
 }
