@@ -1,33 +1,33 @@
 IP,Result
 8.8.8.8,"PING 8.8.8.8 (8.8.8.8): 56 data bytes
-64 bytes from 8.8.8.8: icmp_seq=0 ttl=54 time=29.312 ms
-64 bytes from 8.8.8.8: icmp_seq=1 ttl=54 time=39.174 ms
-64 bytes from 8.8.8.8: icmp_seq=2 ttl=54 time=33.398 ms
-64 bytes from 8.8.8.8: icmp_seq=3 ttl=54 time=28.918 ms
+64 bytes from 8.8.8.8: icmp_seq=0 ttl=54 time=33.469 ms
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=54 time=29.766 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=54 time=29.324 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=54 time=31.461 ms
 
 --- 8.8.8.8 ping statistics ---
 4 packets transmitted, 4 packets received, 0.0% packet loss
-round-trip min/avg/max/stddev = 28.918/32.701/39.174/4.129 ms
+round-trip min/avg/max/stddev = 29.324/31.005/33.469/1.631 ms
 "
 114.114.114.114,"Error pinging 114.114.114.114: exit status 2
 "
 223.5.5.5,"PING 223.5.5.5 (223.5.5.5): 56 data bytes
-64 bytes from 223.5.5.5: icmp_seq=0 ttl=116 time=8.281 ms
-64 bytes from 223.5.5.5: icmp_seq=1 ttl=116 time=9.529 ms
-64 bytes from 223.5.5.5: icmp_seq=2 ttl=116 time=10.910 ms
-64 bytes from 223.5.5.5: icmp_seq=3 ttl=116 time=10.977 ms
+64 bytes from 223.5.5.5: icmp_seq=0 ttl=116 time=8.634 ms
+64 bytes from 223.5.5.5: icmp_seq=1 ttl=116 time=9.412 ms
+64 bytes from 223.5.5.5: icmp_seq=2 ttl=116 time=9.832 ms
+64 bytes from 223.5.5.5: icmp_seq=3 ttl=116 time=8.835 ms
 
 --- 223.5.5.5 ping statistics ---
 4 packets transmitted, 4 packets received, 0.0% packet loss
-round-trip min/avg/max/stddev = 8.281/9.924/10.977/1.111 ms
+round-trip min/avg/max/stddev = 8.634/9.178/9.832/0.473 ms
 "
 180.76.76.76,"PING 180.76.76.76 (180.76.76.76): 56 data bytes
-64 bytes from 180.76.76.76: icmp_seq=0 ttl=49 time=12.216 ms
-64 bytes from 180.76.76.76: icmp_seq=1 ttl=49 time=13.827 ms
-64 bytes from 180.76.76.76: icmp_seq=2 ttl=49 time=12.108 ms
-64 bytes from 180.76.76.76: icmp_seq=3 ttl=49 time=14.411 ms
+64 bytes from 180.76.76.76: icmp_seq=0 ttl=49 time=11.696 ms
+64 bytes from 180.76.76.76: icmp_seq=1 ttl=49 time=12.459 ms
+64 bytes from 180.76.76.76: icmp_seq=2 ttl=49 time=11.554 ms
+64 bytes from 180.76.76.76: icmp_seq=3 ttl=49 time=11.994 ms
 
 --- 180.76.76.76 ping statistics ---
 4 packets transmitted, 4 packets received, 0.0% packet loss
-round-trip min/avg/max/stddev = 12.108/13.140/14.411/1.001 ms
+round-trip min/avg/max/stddev = 11.554/11.926/12.459/0.346 ms
 "

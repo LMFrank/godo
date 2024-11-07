@@ -2,94 +2,187 @@ package cmd
 
 import (
 	"bytes"
-	"io/ioutil"
+	"fmt"
 	"os"
 	"os/exec"
 	"testing"
 
+	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 )
 
-// MockExecutor is a mock implementation of PingExecutor
-type MockExecutor struct {
-	output string
-	err    error
+// MockExecCommand is a mock function for exec.Command
+var MockExecCommand = func(name string, arg ...string) *exec.Cmd {
+	return exec.Command(name, arg...)
 }
 
-func (m *MockExecutor) Command(name string, arg ...string) *exec.Cmd {
-	cmd := &exec.Cmd{
-		Path:   name,
-		Args:   append([]string{name}, arg...),
-		Stdout: &bytes.Buffer{},
-		Stderr: &bytes.Buffer{},
-	}
-	cmd.Stdout.(*bytes.Buffer).WriteString(m.output)
-	cmd.Stderr.(*bytes.Buffer).WriteString(m.err.Error())
-	return cmd
-}
-
-// TestPingSingleIP tests the ping command for a single IP address
-func TestPingSingleIP(t *testing.T) {
-	// Mock the ping command output
-	_ = &MockExecutor{
-		output: "64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms\n",
-		err:    nil,
+// TestPingIP tests the pingIP function
+func TestPingIP(t *testing.T) {
+	// Mock the exec.Command function to return a known output
+	mockOutput := "64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms\n64 bytes from 8.8.8.8: icmp_seq=2 ttl=56 time=11.9 ms\n"
+	MockExecCommand = func(name string, arg ...string) *exec.Cmd {
+		cmd := exec.Command(name, arg...)
+		cmd.Stdout = bytes.NewBufferString(mockOutput)
+		cmd.Stderr = bytes.NewBufferString("")
+		return cmd
 	}
 
-	// Run the ping command
-	buf := new(bytes.Buffer)
-	cmd := pingCmd
-	cmd.SetOut(buf)
-	cmd.SetArgs([]string{"8.8.8.8"})
-	err := cmd.Execute()
+	// Test a valid IP
+	ip := "8.8.8.8"
+	pingIP(ip)
 
-	assert.NoError(t, err, "Expected no error running the ping command")
-
-	// Check the output format
-	output := buf.String()
-	assert.Contains(t, output, "64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms", "Expected specific output format")
+	// Test an invalid IP
+	ip = "invalid_ip"
+	pingIP(ip)
 }
 
-// TestPingMultipleIPs tests the ping command for multiple IP addresses from a YAML file
+// TestPingMultipleIPs tests the pingMultipleIPs function
 func TestPingMultipleIPs(t *testing.T) {
-	// Create a temporary YAML file
-	ymlContent := `hosts:
-  - 8.8.8.8
-  - 1.1.1.1
-`
-	tempFile, err := ioutil.TempFile("", "hosts.yml")
+	// Create a temporary YAML file with multiple IPs
+	tempFile, err := os.CreateTemp("", "hosts.yml")
 	if err != nil {
 		t.Fatalf("Failed to create temporary file: %v", err)
 	}
 	defer os.Remove(tempFile.Name())
 
-	_, err = tempFile.WriteString(ymlContent)
-	if err != nil {
+	hostsContent := `hosts:
+  - 8.8.8.8
+  - 223.5.5.5
+  - 180.76.76.76
+`
+	if _, err := tempFile.WriteString(hostsContent); err != nil {
 		t.Fatalf("Failed to write to temporary file: %v", err)
 	}
-
-	// Mock the ping command output
-	_ = &MockExecutor{
-		output: "64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms\n",
-		err:    nil,
+	if err := tempFile.Close(); err != nil {
+		t.Fatalf("Failed to close temporary file: %v", err)
 	}
 
-	// Run the ping command with the config file
-	cmd := pingCmd
-	cmd.SetArgs([]string{"-c", tempFile.Name()})
-	err = cmd.Execute()
+	// Mock the exec.Command function to return known outputs
+	mockOutputs := map[string]string{
+		"8.8.8.8":      "64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms\n64 bytes from 8.8.8.8: icmp_seq=2 ttl=56 time=11.9 ms\n",
+		"223.5.5.5":    "64 bytes from 223.5.5.5: icmp_seq=1 ttl=56 time=11.3 ms\n64 bytes from 223.5.5.5: icmp_seq=2 ttl=56 time=11.9 ms\n",
+		"180.76.76.76": "64 bytes from 180.76.76.76: icmp_seq=1 ttl=64 time=1.3 ms\n64 bytes from 180.76.76.76: icmp_seq=2 ttl=64 time=1.9 ms\n",
+	}
+	MockExecCommand = func(name string, arg ...string) *exec.Cmd {
+		ip := arg[len(arg)-1]
+		output := mockOutputs[ip]
+		cmd := exec.Command(name, arg...)
+		cmd.Stdout = bytes.NewBufferString(output)
+		cmd.Stderr = bytes.NewBufferString("")
+		return cmd
+	}
 
-	assert.NoError(t, err, "Expected no error running the ping command")
+	// Call the function
+	pingMultipleIPs(tempFile.Name())
 
-	// Check the response.txt file
-	responseFile := "response.txt"
-	data, err := ioutil.ReadFile(responseFile)
+	// Read the response.csv file and verify the content
+	expectedContent := `IP,Result
+8.8.8.8,64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=56 time=11.9 ms
+223.5.5.5,64 bytes from 223.5.5.5: icmp_seq=1 ttl=56 time=11.3 ms
+64 bytes from 223.5.5.5: icmp_seq=2 ttl=56 time=11.9 ms
+180.76.76.76,64 bytes from 180.76.76.76: icmp_seq=1 ttl=64 time=1.3 ms
+64 bytes from 180.76.76.76: icmp_seq=2 ttl=64 time=1.9 ms
+`
+	actualContent, err := os.ReadFile("response.csv")
 	if err != nil {
-		t.Fatalf("Failed to read response file: %v", err)
+		t.Fatalf("Failed to read response.csv: %v", err)
 	}
 
-	// Check the output format
-	output := string(data)
-	assert.Contains(t, output, "8.8.8.8,64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms", "Expected specific output format for 8.8.8.8")
-	assert.Contains(t, output, "1.1.1.1,64 bytes from 1.1.1.1: icmp_seq=1 ttl=56 time=12.3 ms", "Expected specific output format for 1.1.1.1")
+	assert.Equal(t, expectedContent, string(actualContent))
+}
+
+// TestPingCmd tests the pingCmd function
+func TestPingCmd(t *testing.T) {
+	// Create a new root command
+	rootCmd := &cobra.Command{}
+	pingCmd := NewPingCmd()
+	rootCmd.AddCommand(pingCmd)
+
+	// Test with a single IP
+	buf := new(bytes.Buffer)
+	rootCmd.SetOut(buf)
+	rootCmd.SetArgs([]string{"ping", "8.8.8.8"})
+	MockExecCommand = func(name string, arg ...string) *exec.Cmd {
+		cmd := exec.Command(name, arg...)
+		cmd.Stdout = bytes.NewBufferString("64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms\n")
+		cmd.Stderr = bytes.NewBufferString("")
+		return cmd
+	}
+	err := rootCmd.Execute()
+	assert.NoError(t, err)
+	assert.Contains(t, buf.String(), "64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms")
+
+	// Test with a config file
+	tempFile, err := os.CreateTemp("", "hosts.yml")
+	if err != nil {
+		t.Fatalf("Failed to create temporary file: %v", err)
+	}
+	defer os.Remove(tempFile.Name())
+
+	hostsContent := `hosts:
+  - 8.8.8.8
+  - 223.5.5.5
+  - 180.76.76.76
+`
+	if _, err := tempFile.WriteString(hostsContent); err != nil {
+		t.Fatalf("Failed to write to temporary file: %v", err)
+	}
+	if err := tempFile.Close(); err != nil {
+		t.Fatalf("Failed to close temporary file: %v", err)
+	}
+
+	rootCmd.SetArgs([]string{"ping", "-c", tempFile.Name()})
+	MockExecCommand = func(name string, arg ...string) *exec.Cmd {
+		ip := arg[len(arg)-1]
+		output := "64 bytes from " + ip + ": icmp_seq=1 ttl=56 time=12.3 ms\n"
+		cmd := exec.Command(name, arg...)
+		cmd.Stdout = bytes.NewBufferString(output)
+		cmd.Stderr = bytes.NewBufferString("")
+		return cmd
+	}
+	err = rootCmd.Execute()
+	assert.NoError(t, err)
+
+	// Read the response.csv file and verify the content
+	expectedContent := `IP,Result
+8.8.8.8,64 bytes from 8.8.8.8: icmp_seq=1 ttl=56 time=12.3 ms
+223.5.5.5,64 bytes from 223.5.5.5: icmp_seq=1 ttl=56 time=12.3 ms
+180.76.76.76,64 bytes from 180.76.76.76: icmp_seq=1 ttl=56 time=12.3 ms
+`
+	actualContent, err := os.ReadFile("response.csv")
+	if err != nil {
+		t.Fatalf("Failed to read response.csv: %v", err)
+	}
+
+	assert.Equal(t, expectedContent, string(actualContent))
+}
+
+// NewPingCmd creates a new pingCmd
+func NewPingCmd() *cobra.Command {
+	var configFile string
+
+	pingCmd := &cobra.Command{
+		Use:   "ping [ip | -c hosts.yml]",
+		Short: "Ping a specified IP address or multiple IPs from a YAML file",
+		Long: `Ping a specified IP address or multiple IPs from a YAML file and print the results to the console or a file.
+For example:
+godo ping 8.8.8.8
+godo ping -c hosts.yml`,
+		Args: cobra.RangeArgs(0, 1),
+		Run: func(cmd *cobra.Command, args []string) {
+			if configFile != "" {
+				pingMultipleIPs(configFile)
+			} else if len(args) > 0 {
+				ip := args[0]
+				pingIP(ip)
+			} else {
+				fmt.Println("Please provide an IP address or a config file.")
+			}
+		},
+	}
+
+	pingCmd.Flags().StringVarP(&configFile, "config", "c", "", "Path to the YAML config file containing multiple IPs")
+
+	return pingCmd
 }

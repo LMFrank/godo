@@ -1,23 +1,31 @@
 IP,Result
 8.8.8.8,"PING 8.8.8.8 (8.8.8.8): 56 data bytes
-64 bytes from 8.8.8.8: icmp_seq=0 ttl=54 time=29.031 ms
-64 bytes from 8.8.8.8: icmp_seq=1 ttl=54 time=29.543 ms
-64 bytes from 8.8.8.8: icmp_seq=2 ttl=54 time=29.670 ms
-64 bytes from 8.8.8.8: icmp_seq=3 ttl=54 time=31.426 ms
+64 bytes from 8.8.8.8: icmp_seq=0 ttl=54 time=30.045 ms
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=54 time=31.484 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=54 time=28.900 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=54 time=29.900 ms
 
 --- 8.8.8.8 ping statistics ---
 4 packets transmitted, 4 packets received, 0.0% packet loss
-round-trip min/avg/max/stddev = 29.031/29.918/31.426/0.903 ms
-"
-114.114.114.114,"Error pinging 114.114.114.114: exit status 2
+round-trip min/avg/max/stddev = 28.900/30.082/31.484/0.922 ms
 "
 223.5.5.5,"PING 223.5.5.5 (223.5.5.5): 56 data bytes
-64 bytes from 223.5.5.5: icmp_seq=0 ttl=116 time=9.477 ms
-64 bytes from 223.5.5.5: icmp_seq=1 ttl=116 time=9.253 ms
-64 bytes from 223.5.5.5: icmp_seq=2 ttl=116 time=7.766 ms
-64 bytes from 223.5.5.5: icmp_seq=3 ttl=116 time=17.701 ms
+64 bytes from 223.5.5.5: icmp_seq=0 ttl=116 time=8.706 ms
+64 bytes from 223.5.5.5: icmp_seq=1 ttl=116 time=8.465 ms
+64 bytes from 223.5.5.5: icmp_seq=2 ttl=116 time=7.954 ms
+64 bytes from 223.5.5.5: icmp_seq=3 ttl=116 time=8.946 ms
 
 --- 223.5.5.5 ping statistics ---
 4 packets transmitted, 4 packets received, 0.0% packet loss
-round-trip min/avg/max/stddev = 7.766/11.049/17.701/3.896 ms
+round-trip min/avg/max/stddev = 7.954/8.518/8.946/0.367 ms
+"
+180.76.76.76,"PING 180.76.76.76 (180.76.76.76): 56 data bytes
+64 bytes from 180.76.76.76: icmp_seq=0 ttl=49 time=14.425 ms
+64 bytes from 180.76.76.76: icmp_seq=1 ttl=49 time=12.387 ms
+64 bytes from 180.76.76.76: icmp_seq=2 ttl=49 time=12.280 ms
+64 bytes from 180.76.76.76: icmp_seq=3 ttl=49 time=11.713 ms
+
+--- 180.76.76.76 ping statistics ---
+4 packets transmitted, 4 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 11.713/12.701/14.425/1.028 ms
 "
