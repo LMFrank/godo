@@ -3,12 +3,11 @@ package cmd
 import (
 	"bytes"
 	"fmt"
+	"github.com/spf13/cobra"
+	"github.com/stretchr/testify/assert"
 	"os"
 	"os/exec"
 	"testing"
-
-	"github.com/spf13/cobra"
-	"github.com/stretchr/testify/assert"
 )
 
 // MockExecCommand is a mock function for exec.Command
