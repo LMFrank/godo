@@ -38,8 +38,9 @@ type PingConfig struct {
 }
 
 func init() {
-	rootCmd.AddCommand()
-	pingCmd.Flags().StringVarP(&configFile, "config", "c", "", "Path to the YAML config file containing multiple IPs.")
+	rootCmd.AddCommand(pingCmd)
+	pingCmd.Flags().StringVarP(&configFile, "config", "c", "", "Path to the YAML config file "+
+		"containing multiple IPs.")
 }
 
 func pingIP(ip string) {
