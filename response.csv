@@ -1,0 +1,33 @@
+IP,Result
+223.5.5.5,"PING 223.5.5.5 (223.5.5.5): 56 data bytes
+64 bytes from 223.5.5.5: icmp_seq=0 ttl=116 time=9.938 ms
+64 bytes from 223.5.5.5: icmp_seq=1 ttl=116 time=9.050 ms
+64 bytes from 223.5.5.5: icmp_seq=2 ttl=116 time=9.324 ms
+64 bytes from 223.5.5.5: icmp_seq=3 ttl=116 time=8.761 ms
+
+--- 223.5.5.5 ping statistics ---
+4 packets transmitted, 4 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 8.761/9.268/9.938/0.435 ms
+"
+180.76.76.76,"PING 180.76.76.76 (180.76.76.76): 56 data bytes
+64 bytes from 180.76.76.76: icmp_seq=0 ttl=49 time=12.963 ms
+64 bytes from 180.76.76.76: icmp_seq=1 ttl=49 time=12.417 ms
+64 bytes from 180.76.76.76: icmp_seq=2 ttl=49 time=12.610 ms
+64 bytes from 180.76.76.76: icmp_seq=3 ttl=49 time=11.919 ms
+
+--- 180.76.76.76 ping statistics ---
+4 packets transmitted, 4 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 11.919/12.477/12.963/0.377 ms
+"
+8.8.8.8,"PING 8.8.8.8 (8.8.8.8): 56 data bytes
+64 bytes from 8.8.8.8: icmp_seq=0 ttl=54 time=29.585 ms
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=54 time=30.024 ms
+64 bytes from 8.8.8.8: icmp_seq=2 ttl=54 time=29.155 ms
+64 bytes from 8.8.8.8: icmp_seq=3 ttl=54 time=29.449 ms
+
+--- 8.8.8.8 ping statistics ---
+4 packets transmitted, 4 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 29.155/29.553/30.024/0.313 ms
+"
+114.114.114.114,"Error pinging 114.114.114.114: exit status 2
+"
