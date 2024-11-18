@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"sync"
 )
 
 // pingCmd represents the ping command
@@ -39,7 +40,8 @@ type PingConfig struct {
 
 func init() {
 	rootCmd.AddCommand(pingCmd)
-	pingCmd.Flags().StringVarP(&configFile, "config", "c", "", "Path to the YAML config file containing multiple IPs.")
+	pingCmd.Flags().StringVarP(&configFile, "config", "c", "", "Path to the YAML config file "+
+		"containing multiple IPs.")
 }
 
 func pingIP(ip string) {
@@ -84,11 +86,26 @@ func pingMultipleIPs(configFile string) {
 
 	writer.Write([]string{"IP", "Result"})
 
+	results := make(chan []string)
+	var wg sync.WaitGroup
+
 	for _, ip := range config.Hosts {
-		result := pingSingleIP(ip)
-		writer.Write([]string{ip, result})
+		wg.Add(1)
+		go func(ip string) {
+			defer wg.Done()
+			result := pingSingleIP(ip)
+			results <- []string{ip, result}
+		}(ip)
 	}
 
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	for result := range results {
+		writer.Write(result)
+	}
 }
 
 func pingSingleIP(ip string) string {
