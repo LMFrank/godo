@@ -3,11 +3,11 @@ package cmd
 import (
 	"encoding/csv"
 	"fmt"
+	"github.com/LMFrank/godo/util"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 	"net"
 	"os"
-	"os/exec"
 	"sync"
 )
 
@@ -50,14 +50,16 @@ func pingIP(ip string) {
 		return
 	}
 
-	cmd := exec.Command("ping", "-c", "4", ip)
-	output, err := cmd.CombinedOutput()
+	// cmd := exec.Command("ping", "-c", "4", ip)
+	// output, err := cmd.CombinedOutput()
+	command := fmt.Sprintf("ping -c 4 %s", ip)
+	err, result := util.ExecuteCmd(command)
 	if err != nil {
 		fmt.Printf("Ping command failed with error: %s: %v\n", ip, err)
 		return
 	}
 
-	fmt.Printf("Ping results for %s:\n%s", ip, output)
+	fmt.Printf("Ping results for %s:\n%s", ip, result)
 }
 
 func pingMultipleIPs(configFile string) {
@@ -113,11 +115,13 @@ func pingSingleIP(ip string) string {
 		return fmt.Sprintf("Invalid IP address: %s\n", ip)
 	}
 
-	cmd := exec.Command("ping", "-c", "4", ip)
-	output, err := cmd.CombinedOutput()
+	// cmd := exec.Command("ping", "-c", "4", ip)
+	//output, err := cmd.CombinedOutput()
+	command := fmt.Sprintf("ping -c 4 %s", ip)
+	err, result := util.ExecuteCmd(command)
 	if err != nil {
 		return fmt.Sprintf("Error pinging %s: %v\n", ip, err)
 	}
 
-	return string(output)
+	return result
 }
