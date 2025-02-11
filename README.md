@@ -2,7 +2,17 @@
 基于golang cobra包的命令行运维工具
 
 ### 安装
-下载源码，使用`make build`命令，编译对应机器系统的可执行文件
+```bash
+git clone https://github.com/yourusername/godo.git
+cd godo
+make build
+```
+## 当前功能特性
+
+- 🚀 单IP即时ping测试
+- 📁 支持YAML配置文件批量测试
+- 📊 CSV格式结果输出
+- 🔧 Cobra框架驱动命令行交互
 
 ### 命令介绍：
 ```shell
@@ -38,3 +48,16 @@ set命令用于设置YUM源，支持CentOS系统，默认为阿里云源
 示例：
 会根据系统自动选择对应的YUM源，支持CentOS6/7/8
 `godo set yum`
+
+### 项目结构
+```
+godo/
+├── cmd/            # 命令行实现
+│   ├── ping.go     # ping命令逻辑
+│   └── root.go     # 根命令配置
+├── util/           # 工具函数
+│   └── execute.go  # 命令执行器
+├── go.mod          # 依赖管理
+├── main.go         # 程序入口
+└── README.md       # 项目文档
+```
