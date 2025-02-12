@@ -77,8 +77,14 @@ func pingMultipleIPs(configFile string) {
 		return
 	}
 
-	timestamp := time.Now().Format("2006/01/02_15:04:05")
-	filename := fmt.Sprintf("/response/response_%s.csv", timestamp)
+	timestamp := time.Now().Format("20060102_15-04-05")
+	dir := "./response"
+	err = os.MkdirAll(dir, os.ModePerm)
+	if err != nil {
+		fmt.Printf("Error creating directory: %v\n", err)
+		return
+	}
+	filename := fmt.Sprintf("%s/response_%s.csv", dir, timestamp)
 	file, err := os.Create(filename)
 	if err != nil {
 		fmt.Printf("Error creating response file: %v\n", err)
