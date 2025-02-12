@@ -1,0 +1,7 @@
+IP,Result
+8.8.8.8,"PING 8.8.8.8 (8.8.8.8): 56 data bytes
+64 bytes from 8.8.8.8: icmp_seq=1 ttl=116 time=12.345 ms
+"
+8.8.4.4,"PING 8.8.4.4 (8.8.4.4): 56 data bytes
+64 bytes from 8.8.4.4: icmp_seq=1 ttl=116 time=12.345 ms
+"
