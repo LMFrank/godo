@@ -9,6 +9,7 @@ import (
 	"net"
 	"os"
 	"sync"
+	"time"
 )
 
 // pingCmd represents the ping command
@@ -76,7 +77,9 @@ func pingMultipleIPs(configFile string) {
 		return
 	}
 
-	file, err := os.Create("response.csv")
+	timestamp := time.Now().Format("2006/01/02_15:04:05")
+	filename := fmt.Sprintf("/response/response_%s.csv", timestamp)
+	file, err := os.Create(filename)
 	if err != nil {
 		fmt.Printf("Error creating response file: %v\n", err)
 		return
