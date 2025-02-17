@@ -1,33 +1,13 @@
-package cmd
+package set
 
 import (
 	"fmt"
 	"os/exec"
 	"strings"
-
-	"github.com/spf13/cobra"
 )
 
-// setCmd represents the set command
-var setCmd = &cobra.Command{
-	Use:   "set yum",
-	Short: "Set YUM source for CentOS systems.",
-	Long:  `Set YUM source for CentOS systems, supporting CentOS 6, 7, and 8.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		if args[0] == "yum" {
-			setCentOSYumSource()
-		} else {
-			fmt.Printf("Unsupported action: %s\n", args[0])
-		}
-	},
-}
-
-func init() {
-	rootCmd.AddCommand(setCmd)
-}
-
-func setCentOSYumSource() {
-	version, err := detectCentOSVersion()
+func SetCentOSYumSource() {
+	version, err := DetectCentOSVersion()
 	if err != nil {
 		fmt.Printf("Error detecting CentOS version: %v\n", err)
 		return
@@ -76,7 +56,7 @@ func setCentOSYumSource() {
 	fmt.Printf("CentOS %s YUM source has been successfully changed to Aliyun.\n", version)
 }
 
-func detectCentOSVersion() (string, error) {
+func DetectCentOSVersion() (string, error) {
 	cmd := exec.Command("cat", "/etc/redhat-release")
 	output, err := cmd.Output()
 	if err != nil {

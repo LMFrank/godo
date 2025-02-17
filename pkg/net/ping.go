@@ -1,10 +1,9 @@
-package cmd
+package net
 
 import (
 	"encoding/csv"
 	"fmt"
 	"github.com/LMFrank/godo/util"
-	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 	"net"
 	"os"
@@ -12,56 +11,18 @@ import (
 	"time"
 )
 
-// PingCommand 结构体扩展了 cobra.Command 并添加了 CommandExecutor 字段
-type PingCommand struct {
-	*cobra.Command
-	executor util.CommandExecutor
-}
-
-var pingCmd *PingCommand
-var configFile string
-
-func init() {
-	pingCommand := &cobra.Command{
-		Use:   "ping",
-		Short: "Ping a specified IP or multiple IPs from a YAML file.",
-		Long: `Ping a specified IP address or multiple IPs from a YAML file and print the results to the console or a file.
-For example:
-godo ping 8.8.8.8`,
-		Args: cobra.RangeArgs(0, 1),
-		Run: func(cmd *cobra.Command, args []string) {
-			configFile, _ := cmd.Flags().GetString("config")
-			if configFile != "" {
-				pingMultipleIPs(configFile, pingCmd.executor)
-			} else if len(args) > 0 {
-				ip := args[0]
-				pingIP(ip, pingCmd.executor)
-			} else {
-				fmt.Println("Please provide an IP address or a config file")
-			}
-		},
-	}
-
-	pingCmd = &PingCommand{
-		Command:  pingCommand,
-		executor: &util.DefaultCommandExecutor{},
-	}
-
-	rootCmd.AddCommand(pingCmd.Command)
-	pingCmd.Flags().StringVarP(&configFile, "config", "c", "", "Path to the YAML config file containing multiple IPs.")
-}
-
 type PingConfig struct {
 	Hosts []string `yaml:"hosts"`
 }
 
-func pingIP(ip string, executor util.CommandExecutor) {
+func PingIP(ip string) {
 	if net.ParseIP(ip) == nil {
 		fmt.Printf("Invalid IP address: %s\n", ip)
 		return
 	}
 
 	command := fmt.Sprintf("ping -c 4 %s", ip)
+	executor := util.DefaultCommandExecutor{}
 	err, result := executor.Execute(command)
 	if err != nil {
 		fmt.Printf("Ping command failed with error: %s: %v\n", ip, err)
@@ -71,7 +32,7 @@ func pingIP(ip string, executor util.CommandExecutor) {
 	fmt.Printf("Ping results for %s:\n%s", ip, result)
 }
 
-func pingMultipleIPs(configFile string, executor util.CommandExecutor) {
+func PingMultipleIPs(configFile string) {
 	data, err := os.ReadFile(configFile)
 	if err != nil {
 		fmt.Printf("Error reading config file: %v\n", err)
@@ -112,7 +73,7 @@ func pingMultipleIPs(configFile string, executor util.CommandExecutor) {
 		wg.Add(1)
 		go func(ip string) {
 			defer wg.Done()
-			result := pingSingleIP(ip, executor)
+			result := PingSingleIP(ip)
 			results <- []string{ip, result}
 		}(ip)
 	}
@@ -127,12 +88,13 @@ func pingMultipleIPs(configFile string, executor util.CommandExecutor) {
 	}
 }
 
-func pingSingleIP(ip string, executor util.CommandExecutor) string {
+func PingSingleIP(ip string) string {
 	if net.ParseIP(ip) == nil {
 		return fmt.Sprintf("Invalid IP address: %s\n", ip)
 	}
 
 	command := fmt.Sprintf("ping -c 4 %s", ip)
+	executor := util.DefaultCommandExecutor{}
 	err, result := executor.Execute(command)
 	if err != nil {
 		return fmt.Sprintf("Error pinging %s: %v\n", ip, err)

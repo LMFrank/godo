@@ -53,11 +53,20 @@ set命令用于设置YUM源，支持CentOS系统，默认为阿里云源
 ```
 godo/
 ├── cmd/            # 命令行实现
-│   ├── ping.go     # ping命令逻辑
-│   └── root.go     # 根命令配置
+│   ├── net/        # 网络相关的命令实现
+│   │   ├── net.go  # net命令逻辑
+│   ├── set/        # 设置相关的命令实现
+│   │   ├── set.go  # set命令逻辑
+├── pkg/            # 包含可重用的功能模块
+│   ├── net/        # 网络相关的功能模块
+│   └── set/        # 设置相关的功能模块
+├── response/       # 可能包含响应处理相关的代码（当前为空）
 ├── util/           # 工具函数
-│   └── execute.go  # 命令执行器
+│   └── command_executor.go # 命令执行器
 ├── go.mod          # 依赖管理
+├── go.sum          # 依赖校验和
+├── hosts.yaml      # 主机配置文件
+├── LICENSE         # 许可证文件
 ├── main.go         # 程序入口
 └── README.md       # 项目文档
 ```
