@@ -8,13 +8,12 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "godo",
-	Short: "A brief description of your application",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Godo is a convenient operation and maintenance tool based on Golang Cobra",
+	Long: `Godo is a CLI tool for network monitoring and management, built on Golang Cobra.
+It provides convenient commands for system administrators to perform common network tasks.
+Examples:
+  godo net ping 8.8.8.8
+  godo set yum update`,
 }
 
 func init() {
