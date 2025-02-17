@@ -14,9 +14,9 @@ For example:
 godo ping 8.8.8.8`,
 	Args: cobra.RangeArgs(0, 1),
 	Run: func(cmd *cobra.Command, args []string) {
-		configFile, _ := cmd.Flags().GetString("config")
+		configFile, _ := cmd.Flags().GetString("filename")
 		if configFile == "" {
-			configFile, _ = cmd.Flags().GetString("c")
+			configFile, _ = cmd.Flags().GetString("f")
 		}
 		if configFile != "" {
 			net.PingMultipleIPs(configFile)
@@ -30,5 +30,5 @@ godo ping 8.8.8.8`,
 }
 
 func init() {
-	pingCmd.Flags().StringP("config", "c", "", "Config file path")
+	pingCmd.Flags().StringP("hosts", "f", "", "hosts.yaml 文件路径")
 }
