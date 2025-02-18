@@ -12,8 +12,9 @@ import (
 
 var dnsCmd = &cobra.Command{
 	Use:   "dns",
-	Short: "DNS 解析和响应时间检测",
-	Long:  `聚合多个公共 DNS 服务器（如 8.8.8.8、114.114.114.114）解析同一域名，对比响应时间及结果，检测 DNS 劫持或污染。`,
+	Short: "DNS resolution and response time detection",
+	Long: `Aggregate multiple public DNS servers (such as 8.8.8.8, 114.114.114.114) to resolve the same domain name, 
+compare the response times and results, and detect DNS hijacking or pollution.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
 			fmt.Println("Usage: godo net dns <domain> -f <filename>")

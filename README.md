@@ -7,12 +7,6 @@ git clone https://github.com/yourusername/godo.git
 cd godo
 make build
 ```
-## 当前功能特性
-
-- 🚀 单IP即时ping测试
-- 📁 支持YAML配置文件批量测试
-- 📊 CSV格式结果输出
-- 🔧 Cobra框架驱动命令行交互
 
 ### 命令介绍：
 ```shell
@@ -20,20 +14,35 @@ Usage:
   godo [command]
 
 Available Commands:
-  help        Help about any command
-  ping        Ping a specified IP or multiple IPs from a YAML file.
+  help        Help about any command.
+  net         Network-related commands.
   set         Set YUM source for CentOS systems.
 
 Flags:
   -h, --help     help for godo
 ```
 
-### ping
+### net
+#### ping
 ping命令用于测试IP是否可达，支持单IP和YAML文件批量测试
 示例：
 1. 测试单个IP：
-`godo ping 8.8.8.8`
+`godo net ping 8.8.8.8`
 2. 测试多个IP，将需要测试的IP写入YAML文件，如host.yaml：
+`godo net ping -f hosts.yaml`
+host.yaml:
+```yaml
+hosts:
+  - 8.8.8.8
+  - 114.114.114.114
+  - 223.5.5.5
+  - 180.76.76.76
+```
+
+#### dns
+聚合多个公共 DNS 服务器（如 8.8.8.8、114.114.114.114）解析同一域名，对比响应时间及结果，检测 DNS 劫持或污染。
+示例：
+`godo net dns -f hosts.yaml`
 host.yaml:
 ```yaml
 hosts:
@@ -44,7 +53,8 @@ hosts:
 ```
 
 ### set
-set命令用于设置YUM源，支持CentOS系统，默认为阿里云源
+#### yum
+yum命令用于设置YUM源，支持CentOS系统，默认为阿里云源
 示例：
 会根据系统自动选择对应的YUM源，支持CentOS6/7/8
 `godo set yum`
