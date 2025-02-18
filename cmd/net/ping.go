@@ -14,17 +14,14 @@ For example:
 godo ping 8.8.8.8`,
 	Args: cobra.RangeArgs(0, 1),
 	Run: func(cmd *cobra.Command, args []string) {
-		configFile, _ := cmd.Flags().GetString("filename")
-		if configFile == "" {
-			configFile, _ = cmd.Flags().GetString("f")
-		}
+		configFile, _ := cmd.Flags().GetString("hosts")
 		if configFile != "" {
 			net.PingMultipleIPs(configFile)
 		} else if len(args) > 0 {
 			ip := args[0]
 			net.PingIP(ip)
 		} else {
-			fmt.Println("Please provide an IP address or a config file")
+			fmt.Println("请提供一个IP地址或者hosts.yaml文件")
 		}
 	},
 }

@@ -5,3 +5,4 @@ out/*
 response.csv
 response/*
 /cmd/response/
+/logs/
