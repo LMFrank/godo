@@ -1,6 +1,7 @@
 package set
 
 import (
+	"fmt"
 	"os/exec"
 	"strings"
 
